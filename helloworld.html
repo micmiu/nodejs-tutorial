@@ -1,0 +1,123 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+ <head>
+  <title> New Document </title>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta name="Generator" content="Michael">
+  <meta name="Author" content="micmiu.com">
+  <meta name="Keywords" content="micmiu websocket">
+  <meta name="Description" content="websocket">
+  <style type="text/css">
+			#box {
+				overflow: auto;
+				width: 500px;
+				height: 300px;
+				border: 1px solid #dcdcdc;
+				padding:10px;
+				margin:0 0 10px 0;
+				font-size:12px;
+				font-family: Arial, Helvetica, sans-serif;
+			}
+			#txtInput {
+				width: auto;
+				height: 35px;
+				line-height: 35px;
+				font-size:14px;
+				border:1px solid #ccc;
+			}
+			.error{
+				box-shadow: 0 0 3px #ff0000;
+			}
+			.button {
+				display: inline-block;
+				outline: none;
+				cursor: pointer;
+				text-align: center;
+				text-decoration: none;
+				font: 14px/100% Arial, Helvetica, sans-serif;
+				padding: .5em 2em .55em;
+				text-shadow: 0 1px 1px rgba(0,0,0,.3);
+				-webkit-border-radius: .5em; 
+				-moz-border-radius: .5em;
+				border-radius: .5em;
+				-webkit-box-shadow: 0 1px 2px rgba(0,0,0,.2);
+				-moz-box-shadow: 0 1px 2px rgba(0,0,0,.2);
+				box-shadow: 0 1px 2px rgba(0,0,0,.2);
+			}
+			.button:hover {
+				text-decoration: none;
+			}
+			.button:active {
+				position: relative;
+				top: 1px;
+			}
+			.orange {
+				color: #fef4e9;
+				border: solid 1px #da7c0c;
+				background: #f78d1d;
+				background: -webkit-gradient(linear, left top, left bottom, from(#faa51a), to(#f47a20));
+				background: -moz-linear-gradient(top,  #faa51a,  #f47a20);
+				filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#faa51a', endColorstr='#f47a20');
+			}
+			.orange:hover {
+				background: #f47c20;
+				background: -webkit-gradient(linear, left top, left bottom, from(#f88e11), to(#f06015));
+				background: -moz-linear-gradient(top,  #f88e11,  #f06015);
+				filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#f88e11', endColorstr='#f06015');
+			}
+			.orange:active {
+				color: #fcd3a5;
+				background: -webkit-gradient(linear, left top, left bottom, from(#f47a20), to(#faa51a));
+				background: -moz-linear-gradient(top,  #f47a20,  #faa51a);
+				filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#f47a20', endColorstr='#faa51a');
+			}
+		</style>
+		 <script src="/socket.io/socket.io.js"></script>
+		 <!--从服务器获取socket.io.js  只要你的服务器安装了socket.io 模块那么就可以找到-->
+		<script>
+			  var socket = io.connect('ws://127.0.0.1:8088/');  // 建立到服务器的连接 
+			  //socket.emit('client',  'hi micmiu.com!' ); //向服务器发送数据   在服务器端可以接收到名字是client的数据
+			  socket.on('server', function (data) { //接收来自服务器的 名字叫server的数据
+			 		msgbox(data);
+			  });
+			 //发送消息
+			function sendMsg() {
+				var inpt = document.getElementById('txtInput');
+				var str = inpt.value;
+				if(str.length==0){
+					inpt.className="error";
+					alert("请输入发送的消息内容");
+					return false;
+				}
+				inpt.className = "";
+				msgbox(str);
+				//发送消息至服务器的Scoket。
+				socket.emit('msg', {
+					msg : str
+				});
+				console.log('[client]' + str);
+				inpt.value = "";
+				inpt.focus();
+			}
+			function msgbox(str) {
+				var box = document.getElementById('box');
+				box.innerHTML += str + '<br>';
+			}
+			window.onload = function(){
+				document.body.onkeypress = function(event){
+					var e = window.event || event;
+					if(e.keyCode==13){
+						sendMsg();
+					}
+				}
+			}
+		</script>
+ </head>
+ <body>
+ 		<h2>简单的聊天室</h2>
+		<hr/>
+		<div id='box' ></div>
+		<input type='text' placeholder="请输入内容" id='txtInput' >
+		<input type='button' class="button orange" value='发送' onkeypress="sendMsg()" onclick='sendMsg();'>
+ </body>
+</html>
