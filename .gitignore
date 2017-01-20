@@ -1,0 +1,19 @@
+*.class
+
+# 
+target/
+out/
+build/
+
+# Mac OSX 
+.DS_Store
+
+# eclipse settings
+.settings
+.classpath*
+.project
+
+# idea settings
+.idea
+*.iml
+
