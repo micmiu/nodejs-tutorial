@@ -5,26 +5,59 @@
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <meta name="Generator" content="Michael">
   <meta name="Author" content="micmiu.com">
-  <meta name="Keywords" content="micmiu websocket">
-  <meta name="Description" content="websocket">
+  <meta name="Keywords" content="micmiu base64 nodejs">
+  <meta name="Description" content="base64 decode encode">
+  <script type="text/javascript" src="./js/jquery-1.8.0.min.js"></script>
+  <style type="text/css">
+  	.ta {  
+	    width: 100%; /*自动适应父布局宽度*/  
+	    overflow: auto;  
+	    word-break: break-all;  
+	}  
+  </style>
 </head>
 <body>
- <form id= "form1" action = "http://localhost:8088/" method = "post">
- 姓名：<input type = 'text' name = "name" value ="dragon"><br/>
- 年龄：<input type = "number" name = "age" value ="25">
- <input type = "submit" value =" 提交"/> 
- </form>
- <div>
- 	<div style="width:40%;height:80%">
- 	<textarea rows="3" cols="20"></textarea>
+<h1>Base64 编码/解码</h1>
+ <br>
+ <div style="width:95%;height:500px;float:left;">
+ 	<div style="width:40%;height:100%;float:left;">
+ 	明文：
+ 		<textarea id="ori_code" rows="30" cols="50" class='ta'></textarea>
  	</div>
- 	<div style="width:15%;height:80%">
- 	<button value="<<">&lt;&lt;</button>
- 	<button value=">>">&gt;&gt;</button>
+
+ 	<div style="width:15%;height:100%;float:left;text-align:center;">
+ 		<div style="margin-top: 150px;">
+	 	<div>
+	 	<button type="button" onclick="encodeBase64()"> 加密 &gt; </button>
+	 	<div>
+		</div>
+	 	<button type="button" onclick="decodeBase64()"> 解密 &lt; </button>
+	 	</div>
+	 	</div>
  	</div>
- 	<div style="width:40%;height:80%">
- 	<textarea rows="3" cols="20"></textarea>
+ 	<div style="width:40%;height:100%;float:left;">
+ 	密文：
+ 		<textarea id="dst_code" rows="30" cols="50" class='ta'></textarea>
  	</div>
  </div>
 </body>
+<script type="text/javascript">
+	
+	function decodeBase64(){
+		$("#ori_code").text("");
+		$.post("http://localhost:8088/base64",
+		 {"type":"decode","data":$("#dst_code").val()},
+		 function(data) {
+		  $("#ori_code").text(data);
+		});
+	}
+	function encodeBase64(){
+		$("#dst_code").text("");
+		$.post("http://localhost:8088/base64",
+		 {"type":"encode","data":$("#ori_code").val()},
+		 function(data) { 
+		 $("#dst_code").text(data);
+		});
+	}
+</script>
 </html>
